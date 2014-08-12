@@ -69,6 +69,26 @@ module LinkedIn
         post(path, body: hash_to_xml(message), headers: {"Content-Type" => "application/xml"})
       end
 
+      def connect_by_email(email)
+        path = "/people/~/mailbox"
+
+        message = {
+          'subject' => "Join my network on LinkedIn",
+          'body' => "I'd like to add you to my professional network on LinkedIn.",
+          'recipients' => {
+            'values' => [{
+              'person' => { '_path' => "/people/email=#{email}" }
+             }]
+          },
+          'item-content' => {
+            'invitation-request' => {
+              'connect-type' => 'friend'
+            }
+          }
+        }
+        post(path, body: message.to_json, headers: {"Content-Type" => "application/json"})
+      end
+
       private
 
         def hash_to_xml(hash)
